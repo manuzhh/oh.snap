@@ -93,6 +93,9 @@ let init = (config) => {
 				newUserObj = runFunctionList(newUserObj, userBuilders, builders)
 				userModule.register(newUserObj, callback)
 			},
+			"authenticate":(authToken, reducers = ["default"]) => {
+				return userModule.authenticate(authToken)
+			},
 			"get": (authToken, options, reducers = ["default"], callback) => {
 				userModule.getUsers({"token": authToken}, options, true, (err, users) => {
 					if (!err && users) {
