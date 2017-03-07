@@ -63,7 +63,10 @@ let runFunctionList = (obj, functions, options=[]) => {
 }
 
 /**
- * Registriert eine neue Reducer-Funktion für User-Objekte. Diese kann dann von allen User-Funktionen, User-Objekte schreiben verwendet werden indem der identifer in den jeweiligen reducers-Parameter übernommen wird.
+ * Registriert eine neue Reducer-Funktion für User-Objekte. Diese kann dann von allen User-Funktionen, die User-Objekte lesen verwendet werden
+ * indem der identifer in den jeweiligen reducers-Parameter übernommen wird.
+ *
+ * Diese Funktion wird über users.reducers.register in die API eingebunden.
  * @param  {String} identifer Name der Funktion für spätere Verwendung. Darf nicht "default" sein.
  * @param  {Function} func    Funktion die ein User-Objekt als Parameter akzeptiert und dieses verändert wieder zurückgibt.
  */
@@ -75,6 +78,8 @@ let userReducersRegister = (identifer, func) => {
 
 /**
  * Liefert eine Liste mit den Identifern aller registrierten Reducer-Funktion für User-Objekte.
+ *
+ * Diese Funktion wird über users.reducers.keys in die API eingebunden.
  * @return {Array} Liste der Identifer.
  */
 let usersReducersKeys =  () => {
@@ -82,7 +87,10 @@ let usersReducersKeys =  () => {
 }
 
 /**
- * Registriert eine neue Builder-Funktion für User-Objekte. Diese kann dann von allen User-Funktionen, User-Objekte lesen verwendet werden indem der identifer in den jeweiligen builders-Parameter übernommen wird.
+ * Registriert eine neue Builder-Funktion für User-Objekte. Diese kann dann von allen User-Funktionen, die User-Objekte schreiben verwendet werden
+ * indem der identifer in den jeweiligen builders-Parameter übernommen wird.
+ *
+ * Diese Funktion wird über users.builders.register in die API eingebunden.
  * @param  {String} identifer Name der Funktion für spätere Verwendung. Darf nicht "default" sein.
  * @param  {Function} func    Funktion die ein User-Objekt als Parameter akzeptiert und dieses verändert wieder zurückgibt.
  */
@@ -94,6 +102,8 @@ let usersBuildersRegister = (identifer, func) => {
 
 /**
  * Liefert eine Liste mit den Identifern aller registrierten Builder-Funktion für User-Objekte.
+ *
+ * Diese Funktion wird über users.builders.keys in die API eingebunden.
  * @return {Array} Liste der Identifer.
  */
 let usersBuildersKeys = () => {
@@ -117,6 +127,7 @@ let usersLogin = (loginData, callback) => {
  * dem User-Objekt weitere Eigenschaften hinzuzufügen, sowie eine callback-Funktion die aufgerufen wird sobald der Vorgan abgeschlossen ist.
  * Das übergebene User-Objekt muss die Elemente userName, password und passwordConf enthalten. der Inhalt der von password und passwordConf muss identisch sein.
  * Das übergbene User-Objekt darf keine Elemente enhalten mit dem Bezeichnern:
+ * _id
  * 	hashedPassword
  * 	online
  * 	followl
@@ -188,8 +199,8 @@ let usersGet = (authToken, options, reducers = ["default"], callback) => {
  *
  * Diese Funktion wird über users.connect in die API eingebunden.
  * @param  {String}   token      JSON-Webtoken des anfragenden Users.
- * @param  {[type]}   userIdFrom ID des Benutzers von dem die Verbindung ausgeht.
- * @param  {[type]}   userIdTo   ID des Benutzers zu dem die Verbindung hin geht.
+ * @param  {String}   userIdFrom ID des Benutzers von dem die Verbindung ausgeht.
+ * @param  {String}   userIdTo   ID des Benutzers zu dem die Verbindung hin geht.
  * @param  {Function} callback   Funktion die ausgeführt wird sobald der Connect-Prozess abgeschlossen ist.  Diese erhält zwei Parameter (error, response).
  * Der erste Parameter enthält einen Errorcode, falls der Prozess fehlgeschlagen ist, ansonsten null.
  * Der zweite Parameter enthält ein User-Objekt, des Nutzers mit der ID die in userIDTo übergeben wurde oder null.
@@ -208,8 +219,8 @@ let usersConnect = (token, userIdFrom, userIdTo, callback) => {
  *
  * Diese Funktion wird über users.disconnect in die API eingebunden.
  * @param  {String}   token      JSON-Webtoken des anfragenden Users.
- * @param  {[type]}   userIdFrom ID des Benutzers von dem die Verbindung ausgeht.
- * @param  {[type]}   userIdTo   ID des Benutzers zu dem die Verbindung hin geht.
+ * @param  {String}   userIdFrom ID des Benutzers von dem die Verbindung ausgeht.
+ * @param  {String}   userIdTo   ID des Benutzers zu dem die Verbindung hin geht.
  * @param  {Function} callback   Funktion die ausgeführt wird sobald der Dissconnect-Prozess abgeschlossen ist.  Diese erhält zwei Parameter (error, response).
  * Der erste Parameter enthält einen Errorcode, falls der Prozess fehlgeschlagen ist, ansonsten null.
  * Der zweite Parameter enthält ein User-Objekt, des Nutzers mit der ID die in userIDTo übergeben wurde oder null.
@@ -228,8 +239,7 @@ let usersDisconnect = (token, userIdFrom, userIdTo, callback) => {
  *
  * Diese Funktion wird über users.logout in die API eingebunden.
  * @param  {String}   token      JSON-Webtoken des anfragenden Users.
- * @param  {Function} callback [description]
- * @return {[type]}             Eine Funktion die Aufgerufen werden soll, sobald der Logout-Prozess abgeschlossen wurde. Diese erhält zwei Parameter (error, response).
+ * @param  {Function} callback Eine Funktion die Aufgerufen werden soll, sobald der Logout-Prozess abgeschlossen wurde. Diese erhält zwei Parameter (error, response).
  * Der erste Parameter enthält einen Errorcode, falls der Prozess fehlgeschlagen ist, ansonsten null.
  * Der zweite Parameter enthält das User-Objekt des anfragenden Users oder null.
  */
@@ -257,27 +267,75 @@ let users = {
 	"logout": usersLogout
 }
 
+/**
+ * Registriert eine neue Reducer-Funktion für Content-Objekte. Diese kann dann von allen Content-Funktionen, die Content-Objekte lesen verwendet werden
+ * indem der identifer in den jeweiligen reducers-Parameter übernommen wird.
+ *
+ * Diese Funktion wird über content.reducers.register in die API eingebunden.
+ * @param  {String} identifer Name der Funktion für spätere Verwendung. Darf nicht "default" sein.
+ * @param  {Function} func    Funktion die ein Content-Objekt als Parameter akzeptiert und dieses verändert wieder zurückgibt.
+ */
 let contentReducersRegister = (identifer, func) => {
 	if (identifer instanceof String && func instanceof Function) {
 		contentReducers[identifer] = func
 	}
 }
 
+/**
+ * Liefert eine Liste mit den Identifern aller registrierten Reducer-Funktion für Content-Objekt.
+ *
+ * Diese Funktion wird über content.reducers.keys in die API eingebunden.
+ * @return {Array} Liste der Identifer.
+ */
 let contentReducersKeys = () => {
 	return Object.keys(contentReducers);
 }
 
+/**
+ * Registriert eine neue Builder-Funktion für Content-Objekte. Diese kann dann von allen Content-Funktionen, die Content-Objekte schreiben verwendet werden
+ * indem der identifer in den jeweiligen builders-Parameter übernommen wird.
+ *
+ * Diese Funktion wird über content.builders.register in die API eingebunden.
+ * @param  {String} identifer Name der Funktion für spätere Verwendung. Darf nicht "default" sein.
+ * @param  {Function} func    Funktion die ein Content-Objekt als Parameter akzeptiert und dieses verändert wieder zurückgibt.
+ */
 let contentBuildersRegister = (identifer, func) => {
 	if (identifer instanceof String && func instanceof Function) {
 		contentBuilders[identifer] = func
 	}
 }
 
+/**
+ * Liefert eine Liste mit den Identifern aller registrierten Builder-Funktion für Content-Objekt.
+ *
+ * Diese Funktion wird über content.builders.keys in die API eingebunden.
+ * @return {Array} Liste der Identifer.
+ */
 let contentBuildersKeys = () => {
 	return Object.keys(contentBuilders);
 }
 
-let contentCreate = (token, newContentObj, builders = ["default"], callback) => {
+/**
+ * Funktion die ein neues Contentobjekt speichert.
+ * Dazu erhält sie ein JSON-Webtoken, ein Objekt mit dem zu speichernden Content und eine Liste mit Identifern von Builder-Funktion,
+ * die auf das Content-Objekt angewendet werden sollen.
+ *
+ * Das Content-Objekt darf folgende Elemente nicht enthalten:
+ * _id
+ * TODO!
+ *
+ * Wird stat dem Content-Objekt lediglich ein String übergeben wird zunächst ein Objekt erzeugt welches dem Element contentString hinzugefügt wird.
+ * Dieses Objekt wird dann anstelle des Strings in die Datenbank gespeichert.
+ *
+ * Diese Funktion wird über content.create in die API eingebunden.
+ * @param  {String}   authToken                  JSON-Webtoken des anfragenden Users.
+ * @param  {Object|String}   newContentObj   Objekt welches als Content in die Datenbank gespeichert werden soll.
+ * @param  {Array}    [builders=["default"]] Liste mit Bezeichnern von Builder-Funktion, die auf das Content-Objekt angewendet werden sollen bevor es gespeichert wird.
+ * @param  {Function} callback                Eine Funktion die Aufgerufen werden soll, sobald der Speicherungs-Prozess abgeschlossen wurde. Diese erhält zwei Parameter (error, response).
+ * Der erste Parameter enthält einen Errorcode, falls der Prozess fehlgeschlagen ist, ansonsten null.
+ * Der zweite Parameter enthält das Content-Objekt aus der Datenbank oder null.
+ */
+let contentCreate = (authToken, newContentObj, builders = ["default"], callback) => {
 	//if client only provides a string as content
 	if (typeof newContentObj === 'string') {
 		newContentObj = {
@@ -287,9 +345,21 @@ let contentCreate = (token, newContentObj, builders = ["default"], callback) => 
 
 	newContentObj = runFunctionList(newContentObj, contentBuilders, builders)
 
-	contentModule.create(token, newContentObj, callback)
+	contentModule.create(authToken, newContentObj, callback)
 }
 
+/**
+ * Funktion zum suchen von Content-Objekten.
+ *
+ * Diese Funktion wird über content.get in die API eingebunden.
+ * @param  {String}   authToken               JSON-Webtoken des anfragenden Users.
+ * @param  {Object}   options                Stellt den Filter da, der die Menge der zu ermittelnden Content-Objekten spezifiziert.
+ * z. B. könnte das Objekt folgendermaßen aussehen: {_id: 1}.
+ * @param  {Array}    [reducers=["default"]] Liste mit Bezeichnern von Reducer-Funktion, die auf die Content-Objekte angewendet werden sollen bevor es zurückgegeben wird.
+ * @param  {Function} callback               Eine Funktion die Aufgerufen werden soll, sobald der Such-Prozess abgeschlossen wurde. Diese erhält zwei Parameter (error, response).
+ * Der erste Parameter enthält einen Errorcode, falls der Prozess fehlgeschlagen ist, ansonsten null.
+ * Der zweite Parameter enthält eine Liste Content-Objekten aus der Datenbank oder null.
+ */
 let contentGet = (authToken, options, reducers = ["default"], callback) => {
 	contentModule.getContent(authToken, options, true, (err, content) => {
 		if (content) {
@@ -305,9 +375,27 @@ let contentGet = (authToken, options, reducers = ["default"], callback) => {
 	})
 }
 
-let contentUpdate = (token, updatedContentObj, builders = ["default"], callback) => {
+/**
+ * Funktion zum ändern von Content-Objekten in der Datenbank.
+ * Dazu erhält sie ein JSON-Webtoken, ein Objekt mit dem zu ändernden Content und eine Liste mit Identifern von Builder-Funktion,
+ * die auf das Content-Objekt angewendet werden sollen.
+ * Das Content-Objekt muss eine die ein Element _id enthalten.
+ * Elemente die in dem in dem übergebenem Objekt nicht vorhanden sind, aber in der Datenbank stehen werden nicht verändert. TODO: richtig?
+ *
+ * Das Content-Objekt darf folgende Elemente nicht enthalten:
+ * TODO!
+ *
+ * Diese Funktion wird über content.update in die API eingebunden.
+ * @param  {String}   authToken               JSON-Webtoken des anfragenden Users.
+ * @param  {Object}   updatedContentObj      Objekt welches als Content in die Datenbank geupdated werden soll.
+ * @param  {Array}    [builders=["default"]] Liste mit Bezeichnern von Builder-Funktion, die auf das Content-Objekt angewendet werden sollen bevor es gespeichert wird.
+ * @param  {Function} callback               Eine Funktion die Aufgerufen werden soll, sobald der Update-Prozess abgeschlossen wurde. Diese erhält zwei Parameter (error, response).
+ * Der erste Parameter enthält einen Errorcode, falls der Prozess fehlgeschlagen ist, ansonsten null.
+ * Der zweite Parameter enthält das geänderte Content-Objekt aus der Datenbank oder null.
+ */
+let contentUpdate = (authToken, updatedContentObj, builders = ["default"], callback) => {
 	updatedContentObj = runFunctionList(updatedContentObj, contentBuilders, builder)
-	contentModule.create(token, updatedContentObj, callback)
+	contentModule.create(authToken, updatedContentObj, callback)
 }
 
 let content = {
