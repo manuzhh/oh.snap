@@ -24,7 +24,7 @@ let userBuilders = {
 
 let contentReducers = {
 	"default": (contentObj) => {
-
+		return contentObj;
 	}
 }
 
@@ -39,6 +39,14 @@ let contentBuilders = {
 	}
 }
 
+/**
+ * Führt eine Menge von Funktionen, deren Identifier in einem Array übergeben wurden, aus einem übergebenem Reducer/Builder-Objekt auf einem übergebenem Objekt aus.
+ * Dabei wird die default-Funktion des übergebenem Reducer/Builder-Objekt immer ausgeführt.
+ * @param  {Object} obj          Objekt auf welchem die Reducer/Builder-Funktionen ausgeführt werden sollen.
+ * @param  {Object} functions    Reducer/Builder-Objekt.
+ * @param  {Array}  [options=[]] Liste von Identifiern, der auszuführenden Reducer/Builder-Funktionen.
+ * @return {Object}              Das von den Reducer/Builder-Funktionen verarbeitete Objekt.
+ */
 let runFunctionList = (obj, functions, options=[]) => {
 	if (options instanceof Array) {
 		options.unshift("default")
@@ -55,6 +63,26 @@ let runFunctionList = (obj, functions, options=[]) => {
 	return obj
 }
 
+/**
+ * Init-Funktion des Pakets, an die die alle notwendigen Konfigurationsdaten übergeben werden, welche dann ein Objekt zurückgibt, welches alle API-Funktionen beinhaltet.
+ * Die Konfigurationsdaten müssen folgende Eigenschaften aufweisen:
+ * {type: "mongodb|neo4j",
+ * host: "HOSTADDRESS",
+ * dataStore: "USE DATABASE NAME",
+ * login: "LOGIN NAME FOR DATABASE",
+ * password: "PASSWORD FOR DATABASE"
+ * }
+ *
+ * Der Aufruf der API funktioniert folgendermaßen:
+ * Zuerst wird die Init-Funktion aufgerufen und ihr werden die Konfigurationsdaten übergeben.
+ * let snap = require("oh.snap").init({CONFIG})
+ * Der return-Wert der Init-Funktion enthält dann alle API Funktionen, ein Aufruf dieser Funktionen könnte wie folgt aussehen:
+ * snap.users.get(...)
+ * snap.content.create(...)
+ *
+ * @param  {Object} config Konfigurationsdaten, wie oben beschrieben.
+ * @return {Object}        Ein Objekt welches alle API-Funktionen beinhaltet.
+ */
 let init = (config) => {
 
 	//dataStore config
