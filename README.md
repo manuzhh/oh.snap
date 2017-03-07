@@ -24,16 +24,40 @@ const snap = require('oh.snap').init({
 
 ### API verwenden
 Die API umfasst folgede Funktionen
+
+#### users
 ```JavaScript
+snap.users.reducers.register(identifer, func)
+snap.users.reducers.keys()
+snap.users.builders.register(identifer, func)
+snap.users.builders.keys()
+snap.users.login(loginData, callback)
+snap.users.register(newUserObj, builders, callback)
+snap.users.authenticate(authToken, reducers)
+snap.users.get(authToken, options, reducers, callback)
+snap.users.connect(token, userIdFrom, userIdTo, callback)
+snap.users.disconnect(token, userIdFrom, userIdTo, callback)
+snap.users.logout(token, callback)
 ```
 
-### Benutzer registrieren 
+#### content
+```JavaScript
+snap.content.reducers.register(identifer, func)
+snap.content.reducers.keys()
+snap.content.builders.register(identifer, func)
+snap.content.builders.keys()
+snap.content.create(authToken, newContentObj, builders, callback)
+snap.content.get(authToken, options, reducers, callback)
+snap.content.update(authToken, updatedContentObj, builders, callback)
+```
+
+### Benutzer registrieren
 ```JavaScript
 let userName = "ein User"
 let password = "myPassword"
 snap.users.register(
-  {userName, password, passwordConf: password, publicKey}, 
-  ["myBuilder"], // siehe Builder und Reducer 
+  {userName, password, passwordConf: password, publicKey},
+  ["myBuilder"], // siehe Builder und Reducer
   (err, data) => {
         if (!!err) {
             console.log(err)
