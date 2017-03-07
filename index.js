@@ -180,6 +180,20 @@ let usersGet = (authToken, options, reducers = ["default"], callback) => {
 	})
 }
 
+/**
+ * Funktion die einen User mit einem anderem verbindet.
+ * Dazu wird der JSON-Webtoken eines Users, die User-ID des Benutzers von dem die Verbindung ausgeht und die User-ID zu dem die Verbindung hin geht übergeben.
+ * Die Funktion trägt den den zweiten Benutzer in die Follow-Liste des ersten Benutzers und den ersten Benutzer in die Follower-Liste des zweiten Benutzers ein.
+ * Soll die Verbindung in beide Richtungen erfolgen muss die Funktion zwei mal aufgerufen werden, wobei die übergebenen ID-Paramter getauscht werden müssen.
+ *
+ * Diese Funktion wird über users.connect in die API eingebunden.
+ * @param  {String}   token      JSON-Webtoken des anfragenden Users.
+ * @param  {[type]}   userIdFrom ID des Benutzers von dem die Verbindung ausgeht.
+ * @param  {[type]}   userIdTo   ID des Benutzers zu dem die Verbindung hin geht.
+ * @param  {Function} callback   Funktion die ausgeführt wird sobald der Connect-Prozess abgeschlossen ist.  Diese erhält zwei Parameter (error, response).
+ * Der erste Parameter enthält einen Errorcode, falls der Prozess fehlgeschlagen ist, ansonsten null.
+ * Der zweite Parameter enthält ein User-Objekt, des Nutzers mit der ID die in userIDTo übergeben wurde oder null.
+ */
 let usersConnect = (token, userIdFrom, userIdTo, callback) => {
 	userModule.connectUsers({
 		token,
@@ -188,6 +202,18 @@ let usersConnect = (token, userIdFrom, userIdTo, callback) => {
 	}, callback)
 }
 
+/**
+ * Funktion die Verbindung eines Users mit einem anderem trennt.
+ * Diese Funktion funktioniert äquivalent zu der usersConnect-Funktion.
+ *
+ * Diese Funktion wird über users.disconnect in die API eingebunden.
+ * @param  {String}   token      JSON-Webtoken des anfragenden Users.
+ * @param  {[type]}   userIdFrom ID des Benutzers von dem die Verbindung ausgeht.
+ * @param  {[type]}   userIdTo   ID des Benutzers zu dem die Verbindung hin geht.
+ * @param  {Function} callback   Funktion die ausgeführt wird sobald der Dissconnect-Prozess abgeschlossen ist.  Diese erhält zwei Parameter (error, response).
+ * Der erste Parameter enthält einen Errorcode, falls der Prozess fehlgeschlagen ist, ansonsten null.
+ * Der zweite Parameter enthält ein User-Objekt, des Nutzers mit der ID die in userIDTo übergeben wurde oder null.
+ */
 let usersDisconnect = (token, userIdFrom, userIdTo, callback) => {
 	userModule.disconnectUsers({
 		token,
@@ -196,6 +222,17 @@ let usersDisconnect = (token, userIdFrom, userIdTo, callback) => {
 	}, callback)
 }
 
+/**
+ * Funktion die den Online-Status eines Users in der Datenbank ändert.
+ *  Dafür benötigt sie ein JSON-Webtoken. Das JSON-Webtoken verliert mit dem Logout nicht an gültigkeit und es ist Aufgabe des Clients das Token aus dem lokalen Speichers zu löschen.
+ *
+ * Diese Funktion wird über users.logout in die API eingebunden.
+ * @param  {String}   token      JSON-Webtoken des anfragenden Users.
+ * @param  {Function} callback [description]
+ * @return {[type]}             Eine Funktion die Aufgerufen werden soll, sobald der Logout-Prozess abgeschlossen wurde. Diese erhält zwei Parameter (error, response).
+ * Der erste Parameter enthält einen Errorcode, falls der Prozess fehlgeschlagen ist, ansonsten null.
+ * Der zweite Parameter enthält das User-Objekt des anfragenden Users oder null.
+ */
 let usersLogout =  (token, callback) => {
 	userModule.logout({
 		token
