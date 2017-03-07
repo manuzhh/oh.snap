@@ -22,11 +22,16 @@ const snap = require('oh.snap').init({
 })
 ```
 
+### API verwenden
+Die API umfasst folgede Funktionen
+```JavaScript
+```
+
 ### Benutzer registrieren 
 ```JavaScript
+let userName = "ein User"
+let password = "myPassword"
 snap.users.register(
-  let userName = "ein User"
-  let password = "myPassword"
   {userName, password, passwordConf: password, publicKey}, 
   ["myBuilder"], // siehe Builder und Reducer 
   (err, data) => {
