@@ -112,7 +112,8 @@ let usersBuildersKeys = () => {
 
 /**
  * Login-Funktion für User. Erwartet ein Objekt mit den Logindaten und eine callback-Funktion, die aufgerufen wird sobald der Loginvorgang abgeschlossen wurde.
- * Diese Funktion wird über users.login in die API eingebunden.
+ *
+ *  Diese Funktion wird über users.login in die API eingebunden.
  * @param  {Object}   loginData Objekt welches die Elemente userName und password beinhaltet.
  * @param  {Function} callback  Eine Funktion die Aufgerufen werden soll, sobald der Login-Prozess abgeschlossen wurde. Diese erhält zwei Parameter (error, response).
  * Der erste Parameter enthält einen Errorcode, falls der Login fehlgeschlagen ist, ansonsten null.
@@ -322,7 +323,6 @@ let contentBuildersKeys = () => {
  *
  * Das Content-Objekt darf folgende Elemente nicht enthalten:
  * _id
- * TODO!
  *
  * Wird stat dem Content-Objekt lediglich ein String übergeben wird zunächst ein Objekt erzeugt welches dem Element contentString hinzugefügt wird.
  * Dieses Objekt wird dann anstelle des Strings in die Datenbank gespeichert.
@@ -380,10 +380,8 @@ let contentGet = (authToken, options, reducers = ["default"], callback) => {
  * Dazu erhält sie ein JSON-Webtoken, ein Objekt mit dem zu ändernden Content und eine Liste mit Identifern von Builder-Funktion,
  * die auf das Content-Objekt angewendet werden sollen.
  * Das Content-Objekt muss eine die ein Element _id enthalten.
- * Elemente die in dem in dem übergebenem Objekt nicht vorhanden sind, aber in der Datenbank stehen werden nicht verändert. TODO: richtig?
+ * Elemente die in dem in dem übergebenem Objekt nicht vorhanden sind, aber in der Datenbank stehen werden nicht verändert.
  *
- * Das Content-Objekt darf folgende Elemente nicht enthalten:
- * TODO!
  *
  * Diese Funktion wird über content.update in die API eingebunden.
  * @param  {String}   authToken               JSON-Webtoken des anfragenden Users.
