@@ -51,6 +51,7 @@ snap.content.get(authToken, options, reducers, callback)
 snap.content.update(authToken, updatedContentObj, builders, callback)
 ```
 
+## Beispiele
 
 ### Benutzer registrieren
 ```JavaScript
@@ -67,7 +68,6 @@ snap.users.login(
             console.log(userObject)
          }
   })
-})
 ```
 
 ### Einlogen
@@ -85,7 +85,6 @@ snap.users.login(
             console.log(userArray)
          }
   })
-})
 ```
 
 ### Benutzer suchen
@@ -104,7 +103,6 @@ snap.users.get(
             console.log(userList)
          }
   })
-})
 ```
 
 Suchen eines Benutzers anhand der ID
@@ -122,8 +120,27 @@ snap.users.get(
             console.log(userList)
          }
   })
-})
 ```
+
+### User verbinden
+Follow Beziehung zwischen zwei Nutzern erzeugen
+```JavaScript
+let jwtToken = "USER-JWT-TOKEN"
+snap.users.connect(
+    jwtToken,
+    userIdFrom,
+    userIdTo,
+    (err, userToObject) => {
+          if (!!err) {
+              console.log(err)
+           }
+           else {
+              console.log(userToObject)
+           }
+  })
+```
+Soll die Verbindung wie eine Freundschaft funktionieren ist die Funktion erneut auszuführen, mit den userIdFrom und userIdTo getauscht.
+
 
 ### Builder und Reducer
 Builder und Reducer sind Funktionen die zum verarbeiten von User- und Content-Objekten beim laden oder speichern verwendet werden können.
