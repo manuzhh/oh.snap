@@ -141,16 +141,18 @@ let init = (config) => {
 					callback(err, users)
 				})
 			},
-			"connect": (token, userTo, callback) => {
+			"connect": (token, userIdFrom, userIdTo, callback) => {
 				userModule.connectUsers({
 					token,
-					payload: userTo
+					userIdFrom,
+					userIdTo,
 				}, callback)
 			},
-			"disconnect": (token, userTo, callback) => {
+			"disconnect": (token, userIdFrom, userIdTo, callback) => {
 				userModule.disconnectUsers({
 					token,
-					payload: userTo
+					userIdFrom,
+					userIdTo
 				}, callback)
 			},
 			"logout": (token, callback) => {
@@ -195,7 +197,7 @@ let init = (config) => {
 			},
 			"get": (authToken, options, reducers = ["default"], callback) => {
 				contentModule.getContent(authToken, options, true, (err, content) => {
-					if (!err && content) {
+					if (content) {
 
 						if (content instanceof Array) {
 							for (let index in content) {
