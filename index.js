@@ -3,7 +3,6 @@
 let contentModule = null
 let userModule = null
 
-
 let userReducers = {
 	"default": (userObj) => {
 		delete userObj.hashedPassword;
@@ -63,6 +62,167 @@ let runFunctionList = (obj, functions, options=[]) => {
 	return obj
 }
 
+
+let userReducersRegister = (identifer, func) => {
+	if (identifer instanceof String && func instanceof Function) {
+		userReducers[identifer] = func
+	}
+}
+
+let usersReducersKeys =  () => {
+	return Object.keys(userReducers);
+}
+
+let usersBuildersRegister = (identifer, func) => {
+	if (identifer instanceof String && func instanceof Function) {
+		userBuilders[identifer] = func
+	}
+}
+
+let usersBuildersKeys = () => {
+	return Object.keys(userBuilders);
+}
+
+let usersLogin = (loginData, callback) => {
+	userModule.login(loginData, callback)
+}
+
+let usersRegister = (newUserObj, builders = ["default"], callback) => {
+	newUserObj = runFunctionList(newUserObj, userBuilders, builders)
+	userModule.register(newUserObj, callback)
+}
+
+let usersAuthenticate = (authToken, reducers = ["default"]) => {
+	return userModule.authenticate(authToken)
+}
+
+let usersGet = (authToken, options, reducers = ["default"], callback) => {
+	userModule.getUsers({"token": authToken}, options, true, (err, users) => {
+		if (!err && users) {
+
+			if (users instanceof Array) {
+				for (let index in users) {
+					users[index] = runFunctionList(users[index], userReducers, reducers)
+				}
+			} else {
+				users = runFunctionList(users, userReducers, reducers)
+			}
+
+		}
+
+		callback(err, users)
+	})
+}
+
+let usersConnect = (token, userIdFrom, userIdTo, callback) => {
+	userModule.connectUsers({
+		token,
+		userIdFrom,
+		userIdTo,
+	}, callback)
+}
+
+let usersDisconnect = (token, userIdFrom, userIdTo, callback) => {
+	userModule.disconnectUsers({
+		token,
+		userIdFrom,
+		userIdTo
+	}, callback)
+}
+
+let usersLogout =  (token, callback) => {
+	userModule.logout({
+		token
+	}, callback)
+}
+
+let users = {
+	"reducers": {
+		"register": userReducersRegister,
+		"keys": usersReducersKeys
+	},
+	"builders": {
+		"register": usersBuildersRegister,
+		"keys": usersBuildersKeys
+	},
+	"login": usersLogin,
+	"register": usersRegister,
+	"authenticate": usersAuthenticate,
+	"get": usersGet,
+	"connect": usersConnect,
+	"disconnect": usersDisconnect,
+	"logout": usersLogout
+}
+
+let contentReducersRegister = (identifer, func) => {
+	if (identifer instanceof String && func instanceof Function) {
+		contentReducers[identifer] = func
+	}
+}
+
+let contentReducersKeys = () => {
+	return Object.keys(contentReducers);
+}
+
+let contentBuildersRegister = (identifer, func) => {
+	if (identifer instanceof String && func instanceof Function) {
+		contentBuilders[identifer] = func
+	}
+}
+
+let contentBuildersKeys = () => {
+	return Object.keys(contentBuilders);
+}
+
+let contentCreate = (token, newContentObj, builders = ["default"], callback) => {
+	//if client only provides a string as content
+	if (typeof newContentObj === 'string') {
+		newContentObj = {
+			"contentString": newContentObj
+		}
+	}
+
+	newContentObj = runFunctionList(newContentObj, contentBuilders, builders)
+
+	contentModule.create(token, newContentObj, callback)
+}
+
+let contentGet = (authToken, options, reducers = ["default"], callback) => {
+	contentModule.getContent(authToken, options, true, (err, content) => {
+		if (content) {
+			if (content instanceof Array) {
+				for (let index in content) {
+					content[index] = runFunctionList(content[index], contentReducers, reducers)
+				}
+			} else {
+				content = runFunctionList(content, contentReducers, reducers)
+			}
+		}
+		callback(err, content)
+	})
+}
+
+let contentUpdate = (token, updatedContentObj, builders = ["default"], callback) => {
+	updatedContentObj = runFunctionList(updatedContentObj, contentBuilders, builder)
+	contentModule.create(token, updatedContentObj, callback)
+}
+
+let content = {
+	"reducers": {
+		"register": contentReducersRegister,
+		"keys": contentReducersKeys
+	},
+	"builders": {
+		"register": contentBuildersRegister,
+		"keys": contentBuildersKeys
+	},
+	"create": contentCreate,
+	"get": contentGet,
+	"update": contentUpdate
+}
+
+
+
 /**
  * Init-Funktion des Pakets, an die die alle notwendigen Konfigurationsdaten übergeben werden, welche dann ein Objekt zurückgibt, welches alle API-Funktionen beinhaltet.
  * Die Konfigurationsdaten müssen folgende Eigenschaften aufweisen:
@@ -92,133 +252,8 @@ let init = (config) => {
 	userModule = require('./lib/user/user')
 
 	return {
-		"users": {
-			"reducers": {
-				"register": (identifer, func) => {
-					if (identifer instanceof String && func instanceof Function) {
-						userReducers[identifer] = func
-					}
-				},
-				"keys": () => {
-					return Object.keys(userReducers);
-				}
-			},
-			"builders": {
-				"register": (identifer, func) => {
-					if (identifer instanceof String && func instanceof Function) {
-						userBuilders[identifer] = func
-					}
-				},
-				"keys": () => {
-					return Object.keys(userBuilders);
-				}
-			},
-
-			"login": (loginData, callback) => {
-				userModule.login(loginData, callback)
-			},
-			"register": (newUserObj, builders = ["default"], callback) => {
-				newUserObj = runFunctionList(newUserObj, userBuilders, builders)
-				userModule.register(newUserObj, callback)
-			},
-			"authenticate":(authToken, reducers = ["default"]) => {
-				return userModule.authenticate(authToken)
-			},
-			"get": (authToken, options, reducers = ["default"], callback) => {
-				userModule.getUsers({"token": authToken}, options, true, (err, users) => {
-					if (!err && users) {
-
-						if (users instanceof Array) {
-							for (let index in users) {
-								users[index] = runFunctionList(users[index], userReducers, reducers)
-							}
-						} else {
-							users = runFunctionList(users, userReducers, reducers)
-						}
-
-					}
-
-					callback(err, users)
-				})
-			},
-			"connect": (token, userIdFrom, userIdTo, callback) => {
-				userModule.connectUsers({
-					token,
-					userIdFrom,
-					userIdTo,
-				}, callback)
-			},
-			"disconnect": (token, userIdFrom, userIdTo, callback) => {
-				userModule.disconnectUsers({
-					token,
-					userIdFrom,
-					userIdTo
-				}, callback)
-			},
-			"logout": (token, callback) => {
-				userModule.logout({
-					token
-				}, callback)
-			}
-
-		},
-		"content": {
-			"reducers": {
-				"register": (identifer, func) => {
-					if (identifer instanceof String && func instanceof Function) {
-						contentReducers[identifer] = func
-					}
-				},
-				"keys": () => {
-					return Object.keys(contentReducers);
-				}
-			},
-			"builders": {
-				"register": (identifer, func) => {
-					if (identifer instanceof String && func instanceof Function) {
-						contentBuilders[identifer] = func
-					}
-				},
-				"keys": () => {
-					return Object.keys(contentBuilders);
-				}
-			},
-			"create": (token, newContentObj, builders = ["default"], callback) => {
-				//if client only provides a string as content
-				if (typeof newContentObj === 'string') {
-					newContentObj = {
-						"contentString": newContentObj
-					}
-				}
-
-				newContentObj = runFunctionList(newContentObj, contentBuilders, builders)
-
-				contentModule.create(token, newContentObj, callback)
-			},
-			"get": (authToken, options, reducers = ["default"], callback) => {
-				contentModule.getContent(authToken, options, true, (err, content) => {
-					if (content) {
-
-						if (content instanceof Array) {
-							for (let index in content) {
-								content[index] = runFunctionList(content[index], contentReducers, reducers)
-							}
-						} else {
-							content = runFunctionList(content, contentReducers, reducers)
-						}
-
-					}
-
-					callback(err, content)
-				})
-			},
-			"update": (token, updatedContentObj, builders = ["default"], callback) => {
-
-				updatedContentObj = runFunctionList(updatedContentObj, contentBuilders, builder)
-
-				contentModule.create(token, updatedContentObj, callback)
-			}
-		}
+		users,
+		content
 	}
 }
 
