@@ -2,14 +2,16 @@
 
 oh.snap ist ein Framework welches ein generisches soziales Netzwerk aufbaut.
 
-## Installation:
+## Installation
 ```console
 npm install oh.snap --save
 ```
 
-## HOWTO
+## API
 
-### Oh.Snap einbinden:
+### Oh.Snap einbinden
+Um die API zu verwenden muss das Paket geladen werden und die Konfiguration für die zu verwendende Datenbank muss übergeben werden.
+Derzeit wird MongoDB als Datenbank voll unterstützt, an einer vollen Unterstützung für Neo4J wird derzeit noch gearbeitet.
 ```JavaScript
 const snap = require('oh.snap').init({
     "type": DATABASETYPE, // Beispiel: "mongodb"
@@ -26,13 +28,15 @@ snap.users.register(
   let userName = "ein User"
   let password = "myPassword"
   {userName, password, passwordConf: password, publicKey}, 
-  ["myBuilder"], 
+  ["myBuilder"], // siehe Builder und Reducer 
   (err, data) => {
-            client.emit("register", data)
-            if (!!err) {
-                console.log(err)
-            }
+        if (!!err) {
+            console.log(err)
+         }
+         else {
+            console.log(data)
+         }
 
-        })
+  })
 })
 ```
