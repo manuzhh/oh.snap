@@ -61,12 +61,12 @@ snap.users.login(
   {userName, password, passwordConf: password},
   ["myBuilder"], // siehe Builder und Reducer
   (err, userObject) => {
-        if (!!err) {
-            console.log(err)
-         }
-         else {
-            console.log(userObject)
-         }
+    if (!!err) {
+        console.log(err)
+     }
+     else {
+        console.log(userObject)
+     }
   })
 ```
 
@@ -78,12 +78,12 @@ snap.users.login(
   {userName, password},
   ["myReducer"], // siehe Builder und Reducer
   (err, userArray) => {
-        if (!!err) {
-            console.log(err)
-         }
-         else {
-            console.log(userArray)
-         }
+    if (!!err) {
+        console.log(err)
+     }
+     else {
+        console.log(userArray)
+     }
   })
 ```
 
@@ -96,12 +96,12 @@ snap.users.get(
   {online: true},
   ["myReducer"], // siehe Builder und Reducer
   (err, userList) => {
-        if (!!err) {
-            console.log(err)
-         }
-         else {
-            console.log(userList)
-         }
+    if (!!err) {
+        console.log(err)
+     }
+     else {
+        console.log(userList)
+     }
   })
 ```
 
@@ -113,12 +113,12 @@ snap.users.get(
   {_id: 1},
   ["myReducer"], // siehe Builder und Reducer
   (err, userList) => {
-        if (!!err) {
-            console.log(err)
-         }
-         else {
-            console.log(userList)
-         }
+    if (!!err) {
+        console.log(err)
+     }
+     else {
+        console.log(userList)
+     }
   })
 ```
 
@@ -131,12 +131,12 @@ snap.users.connect(
     userIdFrom,
     userIdTo,
     (err, userToObject) => {
-          if (!!err) {
-              console.log(err)
-           }
-           else {
-              console.log(userToObject)
-           }
+      if (!!err) {
+          console.log(err)
+       }
+       else {
+          console.log(userToObject)
+       }
   })
 ```
 Soll die Verbindung wie eine Freundschaft funktionieren ist die Funktion erneut auszuführen, mit den userIdFrom und userIdTo getauscht.
@@ -169,13 +169,12 @@ snap.users.register(
   {userName, password, passwordConf: password, publicKey},
   ["benutzer-gruppe-1"], // siehe Builder und Reducer
   (err, data) => {
-        if (!!err) {
-            console.log(err)
-         }
-         else {
-            console.log(data)
-         }
-
+    if (!!err) {
+        console.log(err)
+     }
+     else {
+        console.log(data)
+     }
   })
 })
 ```
