@@ -1,6 +1,6 @@
 {
   "name": "oh.snap",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "social network api project",
   "main": "index.js",
   "scripts": {
