@@ -21,7 +21,7 @@
     "express": "^4.0.0",
     "jsonwebtoken": "^7.1.9",
     "peer": "0.2.8",
-    "snap-datastore": "^0.1.0",
+    "snap-datastore": "0.1.2",
     "socket.io": "^1.6.0"
   }
 }
